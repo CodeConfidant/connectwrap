@@ -1,4 +1,2 @@
-__all__ = list([
-    "database",
-    "utils"
-])
+import utils
+from database import db

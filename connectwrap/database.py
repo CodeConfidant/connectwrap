@@ -15,8 +15,8 @@ class db:
         if (os.path.isfile(db_filepath) == False):
             raise ValueError("The db_filepath argument isn't a file!")
 
-        if (db_filepath.endswith(".db") == False):
-            raise ValueError("The db_filepath argument doesn't have extension .db!")
+        if (utils.isdb(db_filepath) == False):
+            raise ValueError("The db_filepath argument doesn't have the correct extension! Use .db, .sqlite, or .sqlite3!")
 
         self.db_filepath = str(db_filepath)
         self.connection = sqlite3.connect(self.db_filepath)
@@ -59,8 +59,8 @@ class db:
         if (os.path.isfile(db_filepath) == False):
             raise ValueError("The db_filepath argument isn't a file!")
 
-        if (db_filepath.endswith(".db") == False):
-            raise ValueError("The db_filepath argument doesn't have extension .db!")
+        if (utils.isdb(db_filepath) == False):
+            raise ValueError("The db_filepath argument doesn't have the correct extension! Use .db, .sqlite, or .sqlite3!")
         
         if (self.connection_status == True): 
             db.close_db(self)
@@ -225,7 +225,7 @@ class db:
 
         return table 
     
-    # Drop/delete table in the .db file database. 
+    # Drop/delete table in the file database. 
     def drop_table(self, db_table):
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
@@ -237,7 +237,7 @@ class db:
         self.connection_cursor.execute(query)
         self.connection.commit()
 
-    # Create table within the .db file database.
+    # Create table within the file database.
     # The key in each kwargs entry denotes the key name of a column. 
     # The value in each kwargs entry denotes the data type of a column. 
     # The value in each kwargs entry must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'.     
@@ -385,7 +385,7 @@ class db:
         self.connection_cursor.execute(query)
         self.connection.commit()
 
-    # Return true if the key argument exists in a table. 
+    # Return True if the key argument exists in a table. 
     def key_exists(self, db_table, key):
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
@@ -399,7 +399,7 @@ class db:
         
         return False
 
-    # Return true if the db_table argument is a table name within the database. 
+    # Return True if the db_table argument is a table name within the database. 
     def table_exists(self, db_table):
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")

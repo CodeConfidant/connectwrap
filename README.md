@@ -2,59 +2,6 @@
 
     A Python package built on top of the sqlite3 module made specifically for SQLite database file management.
 
-## ***Data Types Comparison***
-
-<table width="100%">
-	<tr>
-		<th align="left">
-            Python
-        </th>
-		<th align="left">
-            SQLite
-        </th>
-	</tr>
-	<tr>
-		<td>
-            None
-        </td>
-		<td>
-            NULL
-        </td>
-	</tr>
-    <tr>
-		<td>
-            int
-        </td>
-		<td>
-            INTEGER
-        </td>
-	</tr>
-    <tr>
-		<td>
-            float
-        </td>
-		<td>
-            REAL
-        </td>
-	</tr>
-    <tr>
-		<td>
-            str
-        </td>
-		<td>
-            TEXT
-        </td>
-	</tr>
-    <tr>
-		<td>
-            bytes
-        </td>
-		<td>
-            BLOB
-        </td>
-	</tr>
-</table>
-
 ## ***Module database, Class db***
 
 <table width="100%">
@@ -72,7 +19,7 @@
         </td>
 		<td>
             Attribute of the string type representing the database file path. <br/>
-            The file must have a .db extension. <br/>
+            The file must have a .db, .sqlite, or .sqlite3 extension. <br/>
             This is the only attribute needed for the object's argument. The other attributes are generated from this.
         </td>
 	</tr>
@@ -141,7 +88,8 @@
         </td>
 		<td>
             Change the db_filepath attribute value. <br/>
-            This allows you to switch between .db files while only creating one object. <br/>
+            The file must have a .db, .sqlite, or .sqlite3 extension. <br/>
+            This allows you to switch between file databases while only creating one object. <br/>
             Works on open or closed databases. The result of this method will be an open Database using the db_filepath argument as the new Database file path.
         </td>
 	</tr>
@@ -213,7 +161,7 @@
             <code>drop_table(db_table)</code>
         </td>
 		<td>
-            Drop/delete table in the .db file database.
+            Drop/delete table in the file database.
         </td>
 	</tr>
     <tr>
@@ -221,7 +169,7 @@
             <code>create_table(db_table, **kwargs)</code>
         </td>
 		<td>
-            Create table within the .db file database. <br/>
+            Create table within the file database. <br/>
             The key in each kwargs entry denotes the key name of a column. <br/>
             The value in each kwargs entry denotes the data type of a column. <br/> 
             The value in each kwargs entry must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'.
@@ -286,7 +234,7 @@
             <code>key_exists(db_table, key)</code>
         </td>
 		<td>
-            Return true if the key argument exists in a table.
+            Return True if the key argument exists in a table.
         </td>
 	</tr>
     <tr>
@@ -294,7 +242,7 @@
             <code>table_exists(db_table)</code>
         </td>
 		<td>
-            Return true if the db_table argument is a table name within the database.
+            Return True if the db_table argument is a table name within the database.
         </td>
 	</tr>
 </table>
@@ -315,7 +263,7 @@
             <code>drop_database(db_filepath)</code>
         </td>
 		<td>
-            Drop/delete .db file database.
+            Drop/delete .db, .sqlite, or .sqlite3 file database.
         </td>
 	</tr>
     <tr>
@@ -323,7 +271,7 @@
             <code>create_database(db_filepath)</code>
         </td>
 		<td>
-            Create .db file database.
+            Create .db, .sqlite, or .sqlite3 file database.
         </td>
 	</tr>
     <tr>
@@ -331,7 +279,7 @@
             <code>ishex(arg)</code>
         </td>
 		<td>
-            Return true if all characters in arg string are hexadecimal.
+            Return True if all characters in arg string are hexadecimal.
         </td>
 	</tr>
     <tr>
@@ -339,7 +287,68 @@
             <code>isfloat(arg)</code>
         </td>
 		<td>
-            Return true if arg string characters constitute a float.
+            Return True if arg string characters constitute a float.
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>isdb(db_filepath)</code>
+        </td>
+		<td>
+            Return True if db_filepath argument has one of the follow extensions: .db, .sqlite, or .sqlite3
+        </td>
+	</tr>
+</table>
+
+## ***Data Types Comparison***
+
+<table width="100%">
+	<tr>
+		<th align="left">
+            Python
+        </th>
+		<th align="left">
+            SQLite
+        </th>
+	</tr>
+	<tr>
+		<td>
+            None
+        </td>
+		<td>
+            NULL
+        </td>
+	</tr>
+    <tr>
+		<td>
+            int
+        </td>
+		<td>
+            INTEGER
+        </td>
+	</tr>
+    <tr>
+		<td>
+            float
+        </td>
+		<td>
+            REAL
+        </td>
+	</tr>
+    <tr>
+		<td>
+            str
+        </td>
+		<td>
+            TEXT
+        </td>
+	</tr>
+    <tr>
+		<td>
+            bytes
+        </td>
+		<td>
+            BLOB
         </td>
 	</tr>
 </table>
