@@ -400,6 +400,24 @@ class db:
         self.connection_cursor.execute(query)
         self.connection.commit()
 
+    # Rename a table. 
+    def rename_table(self, old_name, new_name):
+        if (type(old_name) is not str):
+            raise TypeError("The old_name argument isn't a string!")
+
+        if (type(new_name) is not str):
+            raise TypeError("The new_name argument isn't a string!")
+
+        if (db.table_exists(self, old_name) == False):
+            raise db.TableNotFoundError("The old_name argument table doesn't exist!")
+
+        if (db.table_exists(self, new_name) == True):
+            raise db.TableNotFoundError("The new_name argument table already exists!")
+
+        query = str("ALTER TABLE {0} RENAME TO {1}").format(old_name, new_name)
+        self.connection_cursor.execute(query)
+        self.connection.commit()
+
     # Return True if the key argument exists in a table. 
     def key_exists(self, db_table, key):
         if (type(db_table) is not str):
