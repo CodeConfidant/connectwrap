@@ -158,6 +158,14 @@
 	</tr>
     <tr>
 		<td>
+            <code>rename_table(old_table_name, new_table_name)</code>
+        </td>
+		<td>
+            Rename a table.
+        </td>
+	</tr>
+    <tr>
+		<td>
             <code>drop_table(db_table)</code>
         </td>
 		<td>
@@ -173,6 +181,15 @@
             The key in each kwargs entry denotes the key name of a column. <br/>
             The value in each kwargs entry denotes the data type of a column. <br/> 
             The value in each kwargs entry must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'.
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>create_column(db_table, column, datatype)</code>
+        </td>
+		<td>
+            Create a new column within a table. <br/>
+            The datatype argument must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'.
         </td>
 	</tr>
     <tr>
