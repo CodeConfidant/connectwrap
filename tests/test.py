@@ -29,8 +29,8 @@ demo_database.select_table_name()
 # Select key values from Crew table and output them to terminal. 
 demo_database.select_keys("Crew")
 
-# Select row values in Crew table and output them to terminal. Sort by key crew_id.  
-demo_database.select_table("Crew", "crew_id")
+# Select row values in Crew table and output them to terminal. 
+demo_database.select_table("Crew")
 
 # Select column values by key first_name and output them to terminal. 
 demo_database.select_column("Crew", "first_name")

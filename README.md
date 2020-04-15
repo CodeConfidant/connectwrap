@@ -150,10 +150,10 @@
 	</tr>
     <tr>
 		<td>
-            <code>get_table(db_table, order_key)</code>
+            <code>get_table(db_table)</code>
         </td>
 		<td>
-            Select and return a list of dictionaries with each dictionary representing a row in a table. Sort by order_key.
+            Select and return a list of dictionaries with each dictionary representing a row in a table.
         </td>
 	</tr>
     <tr>
@@ -185,10 +185,10 @@
 	</tr>
     <tr>
 		<td>
-            <code>select_table(db_table, order_key)</code>
+            <code>select_table(db_table)</code>
         </td>
 		<td>
-            Select and output to terminal the rows as dictionaries from a table. Sort by order_key.
+            Select and output to terminal the rows as dictionaries from a table.
         </td>
 	</tr>
     <tr>

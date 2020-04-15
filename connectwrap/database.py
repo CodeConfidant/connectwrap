@@ -164,7 +164,7 @@ class db:
         if (db.key_exists(self, db_table, key) == False):
             raise KeyError("The key argument doesn't exist within the table!")
 
-        table = list(db.get_table(self, db_table, key))
+        table = list(db.get_table(self, db_table))
         i = int(0)
 
         while(i <  len(table)):
@@ -178,23 +178,17 @@ class db:
             
         return None
 
-    # Select and return a list of dictionaries with each dictionary representing a row in a table. Sort by order_key.
-    def get_table(self, db_table, order_key):
+    # Select and return a list of dictionaries with each dictionary representing a row in a table.
+    def get_table(self, db_table):
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
-
-        if (type(order_key) is not str):
-            raise TypeError("The order key argument isn't a string!")
 
         if (db.table_exists(self, db_table) == False):
             raise db.TableNotFoundError("The table doesn't exist!")
 
-        if (db.key_exists(self, db_table, order_key) == False):
-            raise KeyError("The key argument doesn't exist within the table!")
-
         table = list([])
         keys = list(db.get_keys(self, db_table))
-        query = str("SELECT * FROM " + db_table + " ORDER BY " + order_key)
+        query = str("SELECT * FROM " + db_table)
 
         for row in self.connection_cursor.execute(query):
             row_dict = dict.fromkeys(keys)
@@ -275,21 +269,15 @@ class db:
         for name in db.get_table_name(self):
             print("Table Name:", name)
 
-    # Select and output to terminal the rows from a table. Sort by order_key. 
-    def select_table(self, db_table, order_key):
+    # Select and output to terminal the rows from a table.
+    def select_table(self, db_table):
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
-
-        if (type(order_key) is not str):
-            raise TypeError("The order key argument isn't a string!")
 
         if (db.table_exists(self, db_table) == False):
             raise db.TableNotFoundError("The table doesn't exist!")
 
-        if (db.key_exists(self, db_table, order_key) == False):
-            raise KeyError("The key argument doesn't exist within the table!")
-
-        for row in db.get_table(self, db_table, order_key):
+        for row in db.get_table(self, db_table):
             print(db_table, "Row:", row)
        
     # Select and output to terminal the values from keys within a table. 
