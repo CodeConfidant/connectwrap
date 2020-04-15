@@ -101,7 +101,7 @@ class db:
         connection = sqlite3.connect(self.db_filepath)
         connection.row_factory = sqlite3.Row
         connection_cursor = connection.cursor()
-        query = str("SELECT * FROM " + db_table)
+        query = str("SELECT * FROM {0}").format(db_table)
         connection_cursor.execute(query)
         row = connection_cursor.fetchone()
         connection.close()
@@ -122,7 +122,7 @@ class db:
             raise KeyError("The key argument doesn't exist within the table!")
 
         column_values = list([])
-        query = str("SELECT " + key + " FROM " + db_table)
+        query = str("SELECT {0} FROM {1}").format(key, db_table)
 
         for column in self.connection_cursor.execute(query):
             column = str(column).strip("(,')")
@@ -188,7 +188,7 @@ class db:
 
         table = list([])
         keys = list(db.get_keys(self, db_table))
-        query = str("SELECT * FROM " + db_table)
+        query = str("SELECT * FROM {0}").format(db_table)
 
         for row in self.connection_cursor.execute(query):
             row_dict = dict.fromkeys(keys)
@@ -227,7 +227,7 @@ class db:
         if (db.table_exists(self, db_table) == False):
             raise db.TableNotFoundError("The table doesn't exist!")
         
-        query = str("DROP TABLE " + db_table)
+        query = str("DROP TABLE {0}").format(db_table)
         self.connection_cursor.execute(query)
         self.connection.commit()
 
