@@ -222,10 +222,10 @@ class db:
     # Rename a table. 
     def rename_table(self, old_table_name, new_table_name):
         if (type(old_table_name) is not str):
-            raise TypeError("The old_tablename argument isn't a string!")
+            raise TypeError("The old_table_name argument isn't a string!")
 
         if (type(new_table_name) is not str):
-            raise TypeError("The new_tablename argument isn't a string!")
+            raise TypeError("The new_table_name argument isn't a string!")
 
         if (db.table_exists(self, old_table_name) == False):
             raise db.TableNotFoundError("The old_table_name argument table doesn't exist!")
