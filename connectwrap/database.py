@@ -251,7 +251,7 @@ class db:
                 raise TypeError("The value in kwargs must be a string!")
 
             if (kwargs[kwarg] != "int" and kwargs[kwarg] != "float" and kwargs[kwarg] != "str" and kwargs[kwarg] != "bytes" and kwargs[kwarg] != "None"):
-                raise ValueError("The value in kwargs must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None' ")
+                raise ValueError("The value in kwargs must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'")
 
             if (count < len(kwargs) - 1):
                 record += (kwarg + " " + kwargs[kwarg] + ",")
@@ -263,7 +263,34 @@ class db:
         query = query.format(db_table, record)  
         self.connection_cursor.execute(query)
         self.connection.commit()
-    
+
+    # Create new column within a table.
+    # The datatype argument denotes the data type of a column. 
+    # The datatype argument must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'. 
+    def create_column(self, db_table, column, datatype):
+        if (type(db_table) is not str):
+            raise TypeError("The db_table argument isn't a string!")
+
+        if (type(column) is not str):
+            raise TypeError("The column argument isn't a string!")
+
+        if (type(datatype) is not str):
+            raise TypeError("The datatype argument isn't a string!")
+
+        if (db.table_exists(self, db_table) == False):
+            raise db.TableNotFoundError("The table doesn't exist!")
+
+        if (db.key_exists(self, db_table, column) == True):
+            raise KeyError("The column already exists within the table!")
+
+        if (datatype != "int" and datatype != "float" and datatype != "str" and datatype != "bytes" and datatype != "None"):
+                raise ValueError("The datatype argument must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'")
+
+        query = str("ALTER TABLE {0} ADD {1} {2}").format(db_table, column, datatype)
+
+        self.connection_cursor.execute(query)
+        self.connection.commit()
+
     # Select and output to terminal the table names within a database. 
     def select_table_name(self):
         for name in db.get_table_name(self):
