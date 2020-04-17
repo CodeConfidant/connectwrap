@@ -231,7 +231,7 @@ class db:
             raise db.TableNotFoundError("The old_table_name argument table doesn't exist!")
 
         if (db.table_exists(self, new_table_name) == True):
-            raise db.TableNotFoundError("The new_table_name argument table already exists!")
+            raise db.TableExistsError("The new_table_name argument table already exists!")
 
         query = str("ALTER TABLE {0} RENAME TO {1}").format(old_table_name, new_table_name)
         self.connection_cursor.execute(query)
