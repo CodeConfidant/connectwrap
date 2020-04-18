@@ -24,7 +24,7 @@ demo_database.insert_row("Crew", 6, "Worf", "Son of Mogh", 24, "Lieutenant Junio
 demo_database.insert_row("Crew", 7, "Wesley", "Crusher", 16, "Ensign")
 
 # Select table names from database and output them to terminal.
-demo_database.select_table_name()
+demo_database.select_tablenames()
 
 # Select key values from Crew table and output them to terminal. 
 demo_database.select_keys("Crew")

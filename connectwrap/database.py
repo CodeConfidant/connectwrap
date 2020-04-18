@@ -80,7 +80,7 @@ class db:
         return self.db_filepath
 
     # Select and return the table names within a database as strings in a list. 
-    def get_table_name(self):
+    def get_tablenames(self):
         table_names = list([])
         query = "SELECT name FROM sqlite_master WHERE type='table'"
 
@@ -308,8 +308,8 @@ class db:
         self.connection.commit()
 
     # Select and output to terminal the table names within a database. 
-    def select_table_name(self):
-        for name in db.get_table_name(self):
+    def select_tablenames(self):
+        for name in db.get_tablenames(self):
             print("Table Name:", name)
 
     # Select and output to terminal the rows from a table.
@@ -435,7 +435,7 @@ class db:
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
-        for name in db.get_table_name(self):
+        for name in db.get_tablenames(self):
             if (name == db_table):
                 return True
         

@@ -113,7 +113,7 @@
 	</tr>
     <tr>
 		<td>
-            <code>get_table_name()</code>
+            <code>get_tablenames()</code>
         </td>
 		<td>
             Select and return the table names within a database as strings in a list.
@@ -194,7 +194,7 @@
 	</tr>
     <tr>
 		<td>
-            <code>select_table_name()</code>
+            <code>select_tablenames()</code>
         </td>
 		<td>
             Select and output to terminal the table names within a database.
