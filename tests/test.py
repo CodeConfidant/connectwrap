@@ -29,6 +29,9 @@ demo_database.select_tablenames()
 # Select key values from Crew table and output them to terminal. 
 demo_database.select_keys("Crew")
 
+# Select a specific row with key/value args and delete.
+demo_database.drop_row("Crew", "crew_id", 7)
+
 # Select row values in Crew table and output them to terminal. 
 demo_database.select_table("Crew")
 

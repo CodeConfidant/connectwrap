@@ -249,6 +249,29 @@ class db:
         self.connection_cursor.execute(query)
         self.connection.commit()
 
+    # Drop/delete rows within a table with matching key & value. 
+    # The key argument must be a string and a key within the table. 
+    # The value argument must be one of the following types - int, float, str.
+    def drop_row(self, db_table, key, value):
+        if (type(db_table) is not str):
+            raise TypeError("The db_table argument isn't a string!")
+
+        if (type(key) is not str):
+            raise TypeError("The key argument isn't a string!")
+
+        if (type(value) is not int and type(value) is not float and type(value) is not str):
+            raise TypeError("The value argument must be one of the following types - int, float, str")
+
+        if (db.table_exists(self, db_table) == False):
+            raise db.TableNotFoundError("The table doesn't exist!")
+
+        if (db.key_exists(self, db_table, key) == False):
+            raise KeyError("The key argument doesn't exist within the table!")
+
+        query = str("DELETE FROM {0} WHERE {1}={2}").format(db_table, key, value)
+        self.connection_cursor.execute(query)
+        self.connection.commit()
+
     # Create table within the file database.
     # The key in each kwargs entry denotes the key name of a column. 
     # The value in each kwargs entry denotes the data type of a column. 
