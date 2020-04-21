@@ -174,6 +174,16 @@
 	</tr>
     <tr>
 		<td>
+            <code>drop_row(db_table, key, value)</code>
+        </td>
+		<td>
+            Drop/delete rows within a table with matching key & value. <br/>
+            The key argument must be a string and a key within the table. <br/>
+            The value argument must be one of the following types - int, float, str.
+        </td>
+	</tr>
+    <tr>
+		<td>
             <code>create_table(db_table, **kwargs)</code>
         </td>
 		<td>
