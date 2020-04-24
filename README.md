@@ -1,6 +1,6 @@
 # ***connectwrap***
 
-    A Python package built on top of the sqlite3 module made specifically for SQLite database file management.
+    A Python package built on top of the sqlite3 module made specifically for SQLite database management & object relational mapping.
 
     Make sure to have the latest version of Python 3 installed although this should work with previous versions. 
     Pip and git also need to be installed for package installation with command line.  
