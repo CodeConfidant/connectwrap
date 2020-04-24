@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import sqlite3, os, utils
+import sqlite3, os
+from connectwrap import utils
 
 class db:
 

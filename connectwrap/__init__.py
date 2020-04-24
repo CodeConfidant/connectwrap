@@ -1,2 +1,2 @@
-import utils
-from database import db
+from connectwrap import utils
+from connectwrap.database import db
