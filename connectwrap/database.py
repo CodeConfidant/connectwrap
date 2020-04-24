@@ -251,7 +251,7 @@ class db:
 
     # Drop/delete rows within a table with matching key & value. 
     # The key argument must be a string and a key within the table. 
-    # The value argument must be one of the following types - int, float, str.
+    # The value argument must be one of the following types - int, float, str, bytes, None.
     def drop_row(self, db_table, key, value):
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
@@ -259,8 +259,8 @@ class db:
         if (type(key) is not str):
             raise TypeError("The key argument isn't a string!")
 
-        if (type(value) is not int and type(value) is not float and type(value) is not str):
-            raise TypeError("The value argument must be one of the following types - int, float, str")
+        if (type(value) is not int and type(value) is not float and type(value) is not str and type(value) is not bytes and value != None):
+            raise TypeError("The value argument must be one of the following types - int, float, str, bytes, None")
 
         if (db.table_exists(self, db_table) == False):
             raise db.TableNotFoundError("The table doesn't exist!")
@@ -268,7 +268,18 @@ class db:
         if (db.key_exists(self, db_table, key) == False):
             raise KeyError("The key argument doesn't exist within the table!")
 
-        query = str("DELETE FROM {0} WHERE {1}={2}").format(db_table, key, value)
+        if (type(value) is str):
+            query = str("DELETE FROM {0} WHERE {1}='{2}'")
+        elif (type(value) is bytes):
+            value = str(value.hex())
+            query = str("DELETE FROM {0} WHERE {1}='{2}'")
+        elif (value == None):
+            value = str("None")
+            query = str("DELETE FROM {0} WHERE {1}='{2}'")
+        else: 
+            query = str("DELETE FROM {0} WHERE {1}={2}")
+
+        query = query.format(db_table, key, value)
         self.connection_cursor.execute(query)
         self.connection.commit()
 
@@ -436,6 +447,62 @@ class db:
             count += 1
 
         query = query.format(db_table, record)
+        self.connection_cursor.execute(query)
+        self.connection.commit()
+
+    # Update/change row column values within a table.
+    # The key arguments must be strings and keys within the table. 
+    # The value arguments must be one of the following types - int, float, str, bytes, None.
+    def update_row(self, db_table, change_key, change_value, check_key, check_value):
+        if (type(db_table) is not str):
+            raise TypeError("The table name argument isn't a string!")
+        
+        if (type(change_key) is not str):
+            raise TypeError("The key argument isn't a string!")
+
+        if (type(check_key) is not str):
+            raise TypeError("The key argument isn't a string!")
+
+        if (type(change_value) is not int and type(change_value) is not float and type(change_value) is not str and type(change_value) is not bytes and change_value != None):
+            raise TypeError("The change_value argument must be one of the following types - int, float, str, bytes, None")
+
+        if (type(check_value) is not int and type(check_value) is not float and type(check_value) is not str and type(check_value) is not bytes and check_value != None):
+            raise TypeError("The check_value argument must be one of the following types - int, float, str, bytes, None")
+
+        if (db.table_exists(self, db_table) == False):
+            raise db.TableNotFoundError("The table doesn't exist!")
+
+        if (db.key_exists(self, db_table, change_key) == False):
+            raise KeyError("The change_key argument doesn't exist within the table!")
+
+        if (db.key_exists(self, db_table, check_key) == False):
+            raise KeyError("The check_key argument doesn't exist within the table!")
+
+        if (change_value == None or check_value == None):
+            if (change_value == None):
+                change_value = str("None")
+            
+            if (check_value == None):
+                check_value = str("None")
+
+        if (type(change_value) is bytes or type(check_value) is bytes):
+            if (type(change_value) is bytes):
+                change_value = str(change_value.hex()).lower()
+            
+            if (type(check_value) is bytes):
+                check_value == str(check_value.hex()).lower()
+
+        if (type(change_value) is str or type(check_value) is str):
+            if (type(change_value) is str and type(check_value is not str)):
+                query = str("UPDATE {0} SET {1}='{2}' WHERE {3}={4}")
+            elif (type(change_value is not str and type(check_value) is str)):
+                query = str("UPDATE {0} SET {1}={2} WHERE {3}='{4}'")
+            elif (type(change_value) is str and type(check_value) is str):
+                query = str("UPDATE {0} SET {1}='{2}' WHERE {3}='{4}'")
+        else:
+            query = str("UPDATE {0} SET {1}={2} WHERE {3}={4}")
+
+        query = query.format(db_table, change_key, change_value, check_key, check_value)
         self.connection_cursor.execute(query)
         self.connection.commit()
 
