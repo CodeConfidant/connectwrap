@@ -23,6 +23,14 @@ class db:
         self.connection_cursor = self.connection.cursor()
         self.connection_status = bool(True)
 
+    # Custom exception to raise when the Database is open.
+    class DatabaseOpenError(Exception):
+        pass
+
+    # Custom exception to raise when the Database is not open.
+    class DatabaseNotOpenError(Exception):
+        pass
+
     # Custom exception to raise when an argument table doesn't exist in a database. 
     class TableNotFoundError(Exception):
         pass
@@ -34,7 +42,7 @@ class db:
     # Close database connection.
     def close_db(self):
         if (self.connection_status != True):
-            raise AttributeError("Database is not open! The connection status attribute is not set to True!")
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
 
         self.connection.close()
         self.connection_status = bool(False)
@@ -42,7 +50,7 @@ class db:
     # Open database connection. Reset the cursor. 
     def open_db(self):
         if (self.connection_status != False):
-            raise AttributeError("Database is not closed! The connection status attribute is not set to False!")
+            raise db.DatabaseOpenError("Database is not closed! The connection status attribute is not set to False!")
 
         self.connection = sqlite3.connect(self.db_filepath)
         self.connection_cursor = self.connection.cursor()
@@ -81,6 +89,9 @@ class db:
 
     # Select and return the table names within a database as strings in a list. 
     def get_tablenames(self):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         table_names = list([])
         query = "SELECT name FROM sqlite_master WHERE type='table'"
 
@@ -91,7 +102,10 @@ class db:
         return table_names
 
     # Select and return the key names within a table as strings in a list. 
-    def get_keys(self, db_table):    
+    def get_keys(self, db_table):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -108,7 +122,10 @@ class db:
         return list(row.keys())
 
     # Select and return a list of the values in a column of a table based on the key from that column.
-    def get_column(self, db_table, key):     
+    def get_column(self, db_table, key):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -149,6 +166,9 @@ class db:
     # The value argument must be one of the following types - int, float, str, bytes, None.
     # Use a key with a unique value for best results.   
     def get_row(self, db_table, key, value):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -180,6 +200,9 @@ class db:
 
     # Select and return a list of dictionaries with each dictionary representing a row in a table.
     def get_table(self, db_table):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -221,6 +244,9 @@ class db:
 
     # Rename a table. 
     def rename_table(self, old_table_name, new_table_name):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(old_table_name) is not str):
             raise TypeError("The old_table_name argument isn't a string!")
 
@@ -239,6 +265,9 @@ class db:
     
     # Drop/delete table in the file database. 
     def drop_table(self, db_table):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -251,16 +280,19 @@ class db:
 
     # Drop/delete rows within a table with matching key & value. 
     # The key argument must be a string and a key within the table. 
-    # The value argument must be one of the following types - int, float, str.
+    # The value argument must be one of the following types - int, float, str, bytes, None.
     def drop_row(self, db_table, key, value):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
         if (type(key) is not str):
             raise TypeError("The key argument isn't a string!")
 
-        if (type(value) is not int and type(value) is not float and type(value) is not str):
-            raise TypeError("The value argument must be one of the following types - int, float, str")
+        if (type(value) is not int and type(value) is not float and type(value) is not str and type(value) is not bytes and value != None):
+            raise TypeError("The value argument must be one of the following types - int, float, str, bytes, None")
 
         if (db.table_exists(self, db_table) == False):
             raise db.TableNotFoundError("The table doesn't exist!")
@@ -268,7 +300,18 @@ class db:
         if (db.key_exists(self, db_table, key) == False):
             raise KeyError("The key argument doesn't exist within the table!")
 
-        query = str("DELETE FROM {0} WHERE {1}={2}").format(db_table, key, value)
+        if (type(value) is str):
+            query = str("DELETE FROM {0} WHERE {1}='{2}'")
+        elif (type(value) is bytes):
+            value = str(value.hex())
+            query = str("DELETE FROM {0} WHERE {1}='{2}'")
+        elif (value == None):
+            value = str("None")
+            query = str("DELETE FROM {0} WHERE {1}='{2}'")
+        else: 
+            query = str("DELETE FROM {0} WHERE {1}={2}")
+
+        query = query.format(db_table, key, value)
         self.connection_cursor.execute(query)
         self.connection.commit()
 
@@ -277,6 +320,9 @@ class db:
     # The value in each kwargs entry denotes the data type of a column. 
     # The value in each kwargs entry must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'.     
     def create_table(self, db_table, **kwargs):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -308,6 +354,9 @@ class db:
     # Create a new column within a table.
     # The datatype argument must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'.
     def create_column(self, db_table, column, datatype):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -332,11 +381,17 @@ class db:
 
     # Select and output to terminal the table names within a database. 
     def select_tablenames(self):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         for name in db.get_tablenames(self):
             print("Table Name:", name)
 
     # Select and output to terminal the rows from a table.
     def select_table(self, db_table):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -348,7 +403,10 @@ class db:
        
     # Select and output to terminal the values from keys within a table. 
     # Each arg in *args arguments must be strings containing key names within the table.
-    def select_column(self, db_table, *args):     
+    def select_column(self, db_table, *args):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -363,6 +421,9 @@ class db:
             
     # Select and output to terminal the key names within a table. 
     def select_keys(self, db_table):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -378,6 +439,9 @@ class db:
     # The value argument must be one of the following types - int, float, str, bytes, None.
     # Use a key with a unique value for best results.   
     def select_row(self, db_table, key, value):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -398,6 +462,9 @@ class db:
     # Insert row of data into table.
     # Each arg in *args must be one of the following types - int, float, str, bytes, None.
     def insert_row(self, db_table, *args):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The table name argument isn't a string!")
 
@@ -439,8 +506,70 @@ class db:
         self.connection_cursor.execute(query)
         self.connection.commit()
 
+    # Update/change row column values within a table.
+    # The key arguments must be strings and keys within the table. 
+    # The value arguments must be one of the following types - int, float, str, bytes, None.
+    def update_row(self, db_table, change_key, change_value, check_key, check_value):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
+        if (type(db_table) is not str):
+            raise TypeError("The table name argument isn't a string!")
+        
+        if (type(change_key) is not str):
+            raise TypeError("The key argument isn't a string!")
+
+        if (type(check_key) is not str):
+            raise TypeError("The key argument isn't a string!")
+
+        if (type(change_value) is not int and type(change_value) is not float and type(change_value) is not str and type(change_value) is not bytes and change_value != None):
+            raise TypeError("The change_value argument must be one of the following types - int, float, str, bytes, None")
+
+        if (type(check_value) is not int and type(check_value) is not float and type(check_value) is not str and type(check_value) is not bytes and check_value != None):
+            raise TypeError("The check_value argument must be one of the following types - int, float, str, bytes, None")
+
+        if (db.table_exists(self, db_table) == False):
+            raise db.TableNotFoundError("The table doesn't exist!")
+
+        if (db.key_exists(self, db_table, change_key) == False):
+            raise KeyError("The change_key argument doesn't exist within the table!")
+
+        if (db.key_exists(self, db_table, check_key) == False):
+            raise KeyError("The check_key argument doesn't exist within the table!")
+
+        if (change_value == None or check_value == None):
+            if (change_value == None):
+                change_value = str("None")
+            
+            if (check_value == None):
+                check_value = str("None")
+
+        if (type(change_value) is bytes or type(check_value) is bytes):
+            if (type(change_value) is bytes):
+                change_value = str(change_value.hex()).lower()
+            
+            if (type(check_value) is bytes):
+                check_value == str(check_value.hex()).lower()
+
+        if (type(change_value) is str or type(check_value) is str):
+            if (type(change_value) is str and type(check_value is not str)):
+                query = str("UPDATE {0} SET {1}='{2}' WHERE {3}={4}")
+            elif (type(change_value is not str and type(check_value) is str)):
+                query = str("UPDATE {0} SET {1}={2} WHERE {3}='{4}'")
+            elif (type(change_value) is str and type(check_value) is str):
+                query = str("UPDATE {0} SET {1}='{2}' WHERE {3}='{4}'")
+        else:
+            query = str("UPDATE {0} SET {1}={2} WHERE {3}={4}")
+
+        query = query.format(db_table, change_key, change_value, check_key, check_value)
+        self.connection_cursor.execute(query)
+        self.connection.commit()
+
     # Return True if the key argument exists in a table. 
     def key_exists(self, db_table, key):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 
@@ -455,6 +584,9 @@ class db:
 
     # Return True if the db_table argument is a table name within the database. 
     def table_exists(self, db_table):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+        
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
 

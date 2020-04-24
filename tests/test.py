@@ -29,6 +29,9 @@ demo_database.select_tablenames()
 # Select key values from Crew table and output them to terminal. 
 demo_database.select_keys("Crew")
 
+# Update columns from rows based on desired criteria. 
+demo_database.update_row("Crew", "position", "Lieutenant", "crew_id", 5)
+
 # Select a specific row with key/value args and delete.
 demo_database.drop_row("Crew", "crew_id", 7)
 
