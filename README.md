@@ -2,7 +2,7 @@
 
     A Python package built on top of the sqlite3 module made specifically for SQLite database file management.
 
-## ***Module database, Class db***
+## ***Module db***
 
 <table width="100%">
 	<tr>
@@ -48,6 +48,22 @@
             Set to True upon the creation of a new Database object. <br/>
             Opened = True <br/>
             Closed = False
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>DatabaseOpenError</code>
+        </td>
+		<td>
+            Custom exception to raise when the Database is open.
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>DatabaseNotOpenError</code>
+        </td>
+		<td>
+            Custom exception to raise when the Database is not open.
         </td>
 	</tr>
     <tr>
@@ -179,7 +195,7 @@
 		<td>
             Drop/delete rows within a table with matching key & value. <br/>
             The key argument must be a string and a key within the table. <br/>
-            The value argument must be one of the following types - int, float, str.
+            The value argument must be one of the following types - int, float, str, bytes, None.
         </td>
 	</tr>
     <tr>
@@ -254,6 +270,16 @@
 		<td>
             Insert row of data into table. <br/>
             Each arg in *args must be one of the following types - int, float, str, bytes, None.
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>update_row(db_table, change_key, change_value, check_key, check_value)</code>
+        </td>
+		<td>
+            Update/change row column values within a table. <br/>
+            The key arguments must be strings and keys within the table. <br/>
+            The value arguments must be one of the following types - int, float, str, bytes, None. <br/>
         </td>
 	</tr>
     <tr>
