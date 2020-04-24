@@ -362,59 +362,6 @@
 	</tr>
 </table>
 
-## ***Data Types Comparison***
-
-<table width="100%">
-	<tr>
-		<th align="left">
-            Python
-        </th>
-		<th align="left">
-            SQLite
-        </th>
-	</tr>
-	<tr>
-		<td>
-            None
-        </td>
-		<td>
-            NULL
-        </td>
-	</tr>
-    <tr>
-		<td>
-            int
-        </td>
-		<td>
-            INTEGER
-        </td>
-	</tr>
-    <tr>
-		<td>
-            float
-        </td>
-		<td>
-            REAL
-        </td>
-	</tr>
-    <tr>
-		<td>
-            str
-        </td>
-		<td>
-            TEXT
-        </td>
-	</tr>
-    <tr>
-		<td>
-            bytes
-        </td>
-		<td>
-            BLOB
-        </td>
-	</tr>
-</table>
-
 [Back to Top](#connectwrap)
 
 ---
