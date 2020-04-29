@@ -40,6 +40,23 @@ class db:
     class TableExistsError(Exception):
         pass
 
+    # Execute a custom query.
+    def execute(self, query):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
+        if (type(query) is not str):
+            raise TypeError("The query argument isn't a string!")
+
+        return self.connection_cursor.execute(query)
+
+    # Commit a query held in the connection cursor. 
+    def commit(self):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
+        self.connection.commit()
+
     # Close database connection.
     def close_db(self):
         if (self.connection_status != True):
@@ -96,7 +113,7 @@ class db:
         table_names = list([])
         query = "SELECT name FROM sqlite_master WHERE type='table'"
 
-        for name in self.connection_cursor.execute(query):
+        for name in db.execute(self, query):
             name = str(name).strip("(,')")
             table_names.append(name)
 
@@ -142,7 +159,7 @@ class db:
         column_values = list([])
         query = str("SELECT {0} FROM {1}").format(key, db_table)
 
-        for column in self.connection_cursor.execute(query):
+        for column in db.execute(self, query):
             column = str(column).strip("(,')")
 
             if (column.isdigit() == True):
@@ -214,7 +231,7 @@ class db:
         keys = list(db.get_keys(self, db_table))
         query = str("SELECT * FROM {0}").format(db_table)
 
-        for row in self.connection_cursor.execute(query):
+        for row in db.execute(self, query):
             row_dict = dict.fromkeys(keys)
             row_factor = list([])
             i = int(0)
@@ -261,8 +278,8 @@ class db:
             raise db.TableExistsError("The new_table_name argument table already exists!")
 
         query = str("ALTER TABLE {0} RENAME TO {1}").format(old_table_name, new_table_name)
-        self.connection_cursor.execute(query)
-        self.connection.commit()
+        db.execute(self, query)
+        db.commit(self)
     
     # Drop/delete table in the file database. 
     def drop_table(self, db_table):
@@ -276,8 +293,8 @@ class db:
             raise db.TableNotFoundError("The table doesn't exist!")
         
         query = str("DROP TABLE {0}").format(db_table)
-        self.connection_cursor.execute(query)
-        self.connection.commit()
+        db.execute(self, query)
+        db.commit(self)
 
     # Drop/delete rows within a table with matching key & value. 
     # The key argument must be a string and a key within the table. 
@@ -313,8 +330,8 @@ class db:
             query = str("DELETE FROM {0} WHERE {1}={2}")
 
         query = query.format(db_table, key, value)
-        self.connection_cursor.execute(query)
-        self.connection.commit()
+        db.execute(self, query)
+        db.commit(self)
 
     # Create table within the file database.
     # The key in each kwargs entry denotes the key name of a column. 
@@ -349,8 +366,8 @@ class db:
             count += 1
         
         query = query.format(db_table, record)  
-        self.connection_cursor.execute(query)
-        self.connection.commit()
+        db.execute(self, query)
+        db.commit(self)
 
     # Create a new column within a table.
     # The datatype argument must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'.
@@ -377,8 +394,8 @@ class db:
             raise ValueError("The datatype argument must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'")
 
         query = str("ALTER TABLE {0} ADD {1} {2}").format(db_table, column, datatype)
-        self.connection_cursor.execute(query)
-        self.connection.commit()
+        db.execute(self, query)
+        db.commit(self)
 
     # Select and output to terminal the table names within a database. 
     def select_tablenames(self):
@@ -504,8 +521,8 @@ class db:
             count += 1
 
         query = query.format(db_table, record)
-        self.connection_cursor.execute(query)
-        self.connection.commit()
+        db.execute(self, query)
+        db.commit(self)
 
     # Update/change row column values within a table.
     # The key arguments must be strings and keys within the table. 
@@ -563,8 +580,8 @@ class db:
             query = str("UPDATE {0} SET {1}={2} WHERE {3}={4}")
 
         query = query.format(db_table, change_key, change_value, check_key, check_value)
-        self.connection_cursor.execute(query)
-        self.connection.commit()
+        db.execute(self, query)
+        db.commit(self)
 
     # Return True if the key argument exists in a table. 
     def key_exists(self, db_table, key):
