@@ -36,6 +36,10 @@ TableNotFoundError 	                    Custom exception to raise when an argume
 
 TableExistsError 	                    Custom exception to raise when an argument table already exists in a database.
 
+execute(query) 	                        Execute a custom query. The query argument must be a string.
+
+commit() 	                            Commit a query held in the connection cursor. 
+
 close_db() 	                            Close database connection.
 
 open_db() 	                            Open database connection. Reset the cursor.

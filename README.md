@@ -93,6 +93,22 @@
 	</tr>
     <tr>
 		<td>
+            <code>execute(query)</code>
+        </td>
+		<td>
+            Execute a custom query. The query argument must be a string.
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>commit()</code>
+        </td>
+		<td>
+            Commit a query held in the connection cursor.
+        </td>
+	</tr>
+    <tr>
+		<td>
             <code>close_db()</code>
         </td>
 		<td>
