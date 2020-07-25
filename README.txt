@@ -4,7 +4,7 @@ A Python package built on top of the sqlite3 module made specifically for SQLite
 
 Make sure to have the latest version of Python 3 installed although this should work with previous versions.  
 
-To install/update the package with pip enter command in terminal:
+To install the package with pip enter command in terminal:
     pip install connectwrap
 
 To uninstall the package with pip enter command in terminal:
