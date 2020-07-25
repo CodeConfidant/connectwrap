@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
+# Setup python package - python setup.py sdist
 
 from setuptools import setup, find_packages
 
 setup(
     name='connectwrap',
-    version='0.1',
+    version='1.0',
     packages=find_packages(exclude=['tests*']),
     license='MIT',
-    description='Package for SQLite database management & object relational mapping',
+    description='A Python package for SQLite database management & object relational mapping',
     long_description=open('README.txt').read(),
+    long_description_content_type='text/markdown',
     url='https://github.com/CodeConfidant/connectwrap-sqlite3',
     author='Drew Hainer',
-    author_email='codeconfidant@gmail.com'
+    author_email='codeconfidant@gmail.com',
+    platforms=['Windows', 'Linux']
 )
