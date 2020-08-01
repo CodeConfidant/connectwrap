@@ -555,29 +555,25 @@ class db:
         if (db.key_exists(self, db_table, check_key) == False):
             raise KeyError("The check_key argument doesn't exist within the table!")
 
-        if (change_value == None or check_value == None):
-            if (change_value == None):
-                change_value = str("None")
-            
-            if (check_value == None):
-                check_value = str("None")
+        query = str("UPDATE {0} SET {1}={2} WHERE {3}={4}")
 
-        if (type(change_value) is bytes or type(check_value) is bytes):
-            if (type(change_value) is bytes):
-                change_value = str(change_value.hex()).lower()
+        if (change_value == None):
+            change_value = str("'None'")
             
-            if (type(check_value) is bytes):
-                check_value == str(check_value.hex()).lower()
+        if (check_value == None):
+            check_value = str("'None'")
 
-        if (type(change_value) is str or type(check_value) is str):
-            if (type(change_value) is str and type(check_value is not str)):
-                query = str("UPDATE {0} SET {1}='{2}' WHERE {3}={4}")
-            elif (type(change_value is not str and type(check_value) is str)):
-                query = str("UPDATE {0} SET {1}={2} WHERE {3}='{4}'")
-            elif (type(change_value) is str and type(check_value) is str):
-                query = str("UPDATE {0} SET {1}='{2}' WHERE {3}='{4}'")
-        else:
-            query = str("UPDATE {0} SET {1}={2} WHERE {3}={4}")
+        if (type(change_value) is bytes):
+             change_value = str("'" + change_value.hex() + "'").lower()
+            
+        if (type(check_value) is bytes):
+            check_value == str("'" + check_value.hex() + "'").lower()
+
+        if (type(change_value) is str):
+            change_value = str("'" + change_value + "'")
+
+        if (type(check_value) is str):
+            check_value = str("'" + check_value + "'")
 
         query = query.format(db_table, change_key, change_value, check_key, check_value)
         db.execute(self, query)
