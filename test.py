@@ -35,7 +35,7 @@ demo_database.select_keys("Crew")
 demo_database.update_row("Crew", "position", "Lieutenant", "crew_id", 5)
 
 # Select a specific row with key/value args and delete.
-demo_database.drop_row("Crew", "crew_id", 7)
+demo_database.drop_row("Crew", "first_name", "Wesley")
 
 # Select row values in Crew table and output them to terminal. 
 demo_database.select_table("Crew")

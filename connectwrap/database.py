@@ -318,16 +318,16 @@ class db:
         if (db.key_exists(self, db_table, key) == False):
             raise KeyError("The key argument doesn't exist within the table!")
 
+        query = str("DELETE FROM {0} WHERE {1}={2}")
+
+        if (value == None):
+            value = str("'None'")
+            
+        if (type(value) is bytes):
+            value = str("'" + value.hex() + "'").lower()
+            
         if (type(value) is str):
-            query = str("DELETE FROM {0} WHERE {1}='{2}'")
-        elif (type(value) is bytes):
-            value = str(value.hex())
-            query = str("DELETE FROM {0} WHERE {1}='{2}'")
-        elif (value == None):
-            value = str("None")
-            query = str("DELETE FROM {0} WHERE {1}='{2}'")
-        else: 
-            query = str("DELETE FROM {0} WHERE {1}={2}")
+            value = str("'" + value + "'")
 
         query = query.format(db_table, key, value)
         db.execute(self, query)
@@ -502,7 +502,7 @@ class db:
                     record += "'" + arg + "'" + ","
                 elif (type(arg) is bytes):
                     arg = arg.hex()
-                    record += "'" + str(arg) + "'" + ","
+                    record += "'" + str(arg).lower() + "'" + ","
                 elif (arg == None):
                     record += "'None'" + "," 
                 else:
@@ -512,7 +512,7 @@ class db:
                     record += "'" + arg + "'"
                 elif (type(arg) is bytes):
                     arg = arg.hex()
-                    record += "'" + str(arg) + "'"
+                    record += "'" + str(arg).lower() + "'"
                 elif (arg == None):
                     record += "'None'"
                 else:
