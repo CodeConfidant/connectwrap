@@ -27,8 +27,15 @@
         </td>
 		<td>
             Attribute of the string type representing the database file path. <br/>
-            The file must have a .db, .sqlite, or .sqlite3 extension. <br/>
-            This is the only attribute needed for the object's argument. The other attributes are generated from this.
+            The file must have a .db, .sqlite, or .sqlite3 extension.
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>db_table</code>
+        </td>
+		<td>
+            Attribute of the string type representing a table within the database.
         </td>
 	</tr>
     <tr>
@@ -135,6 +142,14 @@
 	</tr>
     <tr>
 		<td>
+            <code>set_db_table(db_table)</code>
+        </td>
+		<td>
+            Change the db_table attribute value.
+        </td>
+	</tr>
+    <tr>
+		<td>
             <code>get_connection_status()</code>
         </td>
 		<td>
@@ -153,6 +168,14 @@
 	</tr>
     <tr>
 		<td>
+            <code>get_db_table()</code>
+        </td>
+		<td>
+            Return the db_table attribute value.
+        </td>
+	</tr>
+    <tr>
+		<td>
             <code>get_tablenames()</code>
         </td>
 		<td>
@@ -161,39 +184,38 @@
 	</tr>
     <tr>
 		<td>
-            <code>get_keys(db_table)</code>
+            <code>get_keys()</code>
         </td>
 		<td>
-            Select and return the key names within a table as strings in a list.
-        </td>
-	</tr>
-    <tr>
-		<td>
-            <code>get_column(db_table, key)</code>
-        </td>
-		<td>
-            Select and return a list of the values in a column based on the key from that column.
+            Select and return the key names within the db_table attribute table as strings in a list.
         </td>
 	</tr>
     <tr>
 		<td>
-            <code>get_row(db_table, key, value)</code>
+            <code>get_column(key)</code>
         </td>
 		<td>
-            Select and return a dictionary representing a row in the database table where the key and value arguments match a row column key and value pair. <br/>
+            Select and return a list of the values in a column within the db_table attribute table based on the key from that column.
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>get_row(key, value)</code>
+        </td>
+		<td>
+            Select and return a dictionary representing a row in the db_table attribute table where the key and value arguments match a row column key and value pair. <br/>
             Only returns the first row with the occurance of the key/value argument pair. <br/>
             Returns None if there's no occurance of the key/value argument in any row in the table. <br/>
             The key argument must be a string and a key within the table. <br/>
-            The value argument must be one of the following types - int, float, str, bytes, None. <br/>
-            Use a key with a unique value for best results.
+            The value argument must be one of the following types - int, float, str, bytes, None.
         </td>
 	</tr>
     <tr>
 		<td>
-            <code>get_table(db_table)</code>
+            <code>get_table()</code>
         </td>
 		<td>
-            Select and return a list of dictionaries with each dictionary representing a row in a table.
+           Select and return a list of dictionaries with each dictionary representing a row in the db_table attribute table.
         </td>
 	</tr>
     <tr>
@@ -206,7 +228,7 @@
 	</tr>
     <tr>
 		<td>
-            <code>drop_table(db_table)</code>
+            <code>drop_table(table)</code>
         </td>
 		<td>
             Drop/delete table in the file database.
@@ -214,17 +236,17 @@
 	</tr>
     <tr>
 		<td>
-            <code>drop_row(db_table, key, value)</code>
+            <code>drop_row(key, value)</code>
         </td>
 		<td>
-            Drop/delete rows within a table with matching key & value. <br/>
+            Drop/delete rows within the db_table attribute table with matching key & value. <br/>
             The key argument must be a string and a key within the table. <br/>
             The value argument must be one of the following types - int, float, str, bytes, None.
         </td>
 	</tr>
     <tr>
 		<td>
-            <code>create_table(db_table, **kwargs)</code>
+            <code>create_table(table, **kwargs)</code>
         </td>
 		<td>
             Create table within the file database. <br/>
@@ -235,10 +257,10 @@
 	</tr>
     <tr>
 		<td>
-            <code>create_column(db_table, column, datatype)</code>
+            <code>create_column(column, datatype)</code>
         </td>
 		<td>
-            Create a new column within a table. <br/>
+            Create a new column within the db_table attribute table. <br/>
             The datatype argument must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'.
         </td>
 	</tr>
@@ -252,74 +274,73 @@
 	</tr>
     <tr>
 		<td>
-            <code>select_table(db_table)</code>
+            <code>select_table()</code>
         </td>
 		<td>
-            Select and output to terminal the rows as dictionaries from a table.
-        </td>
-	</tr>
-    <tr>
-		<td>
-            <code>select_column(db_table, *args)</code>
-        </td>
-		<td>
-             Select and output to terminal the values from keys within a table. <br/> Each arg in *args arguments must be strings containing key names within the table.
+            Select and output to terminal the rows from the db_table attribute table.
         </td>
 	</tr>
     <tr>
 		<td>
-            <code>select_keys(db_table)</code>
+            <code>select_column(*args)</code>
         </td>
 		<td>
-            Select and output to terminal the key names within a table.
+             Select and output to terminal the values from keys within the db_table attribute table. <br/> Each arg in *args arguments must be strings containing key names within the table.
         </td>
 	</tr>
     <tr>
 		<td>
-            <code>select_row(db_table, key, value)</code>
+            <code>select_keys()</code>
         </td>
 		<td>
-            Select and output to terminal a row of a table in a database. <br/>  
+            Select and output to terminal the key names within the db_table attribute table.
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>select_row(key, value)</code>
+        </td>
+		<td>
+            Select and output to terminal a row in the db_table attribute table. <br/>  
             Only outputs the first row with the occurance of the key/value argument pair. <br/>
             Outputs None if there's no occurance of the key/value argument in any row in the table. <br/>
             The key argument must be a string and a key within the table. <br/>
-            The value argument must be one of the following types - int, float, str, bytes, None. <br/>
-            Use a key with a unique value for best results.
+            The value argument must be one of the following types - int, float, str, bytes, None.
         </td>
 	</tr>
     <tr>
 		<td>
-            <code>insert_row(db_table, *args)</code>
+            <code>insert_row(*args)</code>
         </td>
 		<td>
-            Insert row of data into table. <br/>
+            Insert a row of data into the db_table attribute table. <br/>
             Each arg in *args must be one of the following types - int, float, str, bytes, None.
         </td>
 	</tr>
     <tr>
 		<td>
-            <code>update_row(db_table, change_key, change_value, check_key, check_value)</code>
+            <code>update_row(change_key, change_value, check_key, check_value)</code>
         </td>
 		<td>
-            Update/change row column values within a table. <br/>
+            Update/change row column values within the db_table attribute table. <br/>
             The key arguments must be strings and keys within the table. <br/>
-            The value arguments must be one of the following types - int, float, str, bytes, None. <br/>
+            The value arguments must be one of the following types - int, float, str, bytes, None.
         </td>
 	</tr>
     <tr>
 		<td>
-            <code>key_exists(db_table, key)</code>
+            <code>key_exists(key)</code>
         </td>
 		<td>
-            Return True if the key argument exists in a table.
+            Return True if the key argument exists in the db_table attribute table.
         </td>
 	</tr>
     <tr>
 		<td>
-            <code>table_exists(db_table)</code>
+            <code>table_exists(table)</code>
         </td>
 		<td>
-            Return True if the db_table argument is a table name within the database.
+            Return True if the table argument is a table name within the database.
         </td>
 	</tr>
 </table>
