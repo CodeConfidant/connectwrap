@@ -5,8 +5,8 @@ from setuptools import setup, find_packages
 
 setup(
     name='connectwrap',
-    version='1.1.2',
-    packages=find_packages(exclude=['tests*']),
+    version='1.1.3',
+    packages=find_packages(),
     license='MIT',
     description='A Python package for SQLite database management & object relational mapping.',
     long_description=open('README.txt').read(),
