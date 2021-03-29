@@ -73,9 +73,9 @@ get_row(key, value): 	                Select and return a dictionary representin
 
 get_table(): 	                        Select and return a list of dictionaries with each dictionary representing a row in the db_table attribute table.
 
-rename_table(old_table_name, new_table_name): 	    Rename a table.
+rename_table(tablename): 	            Rename db_table attribute table.
 
-drop_table(table): 	                                Drop/delete table in the file database.
+drop_table(table): 	                    Drop/delete table in the file database.
 
 drop_row(key, value): 	                Drop/delete rows within the db_table attribute table with matching key & value. 
                                             The key argument must be a string and a key within the table.

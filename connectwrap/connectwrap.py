@@ -23,7 +23,7 @@ class db:
             raise ValueError("The db_filepath argument doesn't have the correct extension! Use .db, .sqlite, or .sqlite3!")
 
         self.db_filepath = str(db_filepath)
-        self.db_table = db_table
+        self.db_table = str(db_table)
         self.connection = sqlite3.connect(self.db_filepath)
         self.connection_cursor = self.connection.cursor()
         self.connection_status = bool(True)
@@ -262,26 +262,21 @@ class db:
 
         return table 
 
-    # Rename a table. 
-    def rename_table(self, old_table_name, new_table_name):
+    # Rename db_table attribute table. 
+    def rename_table(self, table):
         if (self.connection_status != True):
             raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
 
-        if (type(old_table_name) is not str):
-            raise TypeError("The old_table_name argument isn't a string!")
+        if (type(table) is not str):
+            raise TypeError("The tablename argument isn't a string!")
 
-        if (type(new_table_name) is not str):
-            raise TypeError("The new_table_name argument isn't a string!")
+        if (db.table_exists(self, table) == True):
+            raise db.TableExistsError("The tablename argument table already exists within the database!")
 
-        if (db.table_exists(self, old_table_name) == False):
-            raise db.TableNotFoundError("The old_table_name argument table doesn't exist within the database!")
-
-        if (db.table_exists(self, new_table_name) == True):
-            raise db.TableExistsError("The new_table_name argument table already exists within the database!")
-
-        query = str("ALTER TABLE {0} RENAME TO {1}").format(old_table_name, new_table_name)
+        query = str("ALTER TABLE {0} RENAME TO {1}").format(self.db_table, table)
         db.execute(self, query)
         db.commit(self)
+        self.db_table = table
     
     # Drop/delete table in the database. 
     def drop_table(self, table):
@@ -354,8 +349,19 @@ class db:
             if (type(kwargs[kwarg]) is not str):
                 raise TypeError("The value in kwargs must be a string!")
 
-            if (kwargs[kwarg] != "int" and kwargs[kwarg] != "float" and kwargs[kwarg] != "str" and kwargs[kwarg] != "bytes" and kwargs[kwarg] != "None"):
+            if (kwargs[kwarg].lower() != "int" and kwargs[kwarg].lower() != "float" and kwargs[kwarg].lower() != "str" and kwargs[kwarg].lower() != "bytes" and kwargs[kwarg].lower().title() != "None"):
                 raise ValueError("The value in kwargs must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'")
+
+            if (kwargs[kwarg].lower() == "int"):
+                kwargs[kwarg] = "INTEGER"
+            elif (kwargs[kwarg].lower() == "float"):
+                kwargs[kwarg] = "REAL"
+            elif (kwargs[kwarg].lower() == "str"):
+                kwargs[kwarg] = "TEXT"
+            elif (kwargs[kwarg].lower() == "bytes"):
+                kwargs[kwarg] = "BLOB"
+            else:
+                kwargs[kwarg] = "NULL"
 
             if (count < len(kwargs) - 1):
                 record += (kwarg + " " + kwargs[kwarg] + ",")
@@ -386,8 +392,19 @@ class db:
         if (db.key_exists(self, column) == True):
             raise KeyError("The column already exists within the db_table attribute table!")
 
-        if (datatype != "int" and datatype != "float" and datatype != "str" and datatype != "bytes" and datatype != "None"):
+        if (datatype.lower() != "int" and datatype.lower() != "float" and datatype.lower() != "str" and datatype.lower() != "bytes" and datatype.lower().title() != "None"):
             raise ValueError("The datatype argument must be one of the following strings - 'int', 'float', 'str', 'bytes', 'None'")
+
+        if (datatype.lower() == "int"):
+            datatype = "INTEGER"
+        elif (datatype.lower() == "float"):
+            datatype = "REAL"
+        elif (datatype.lower() == "str"):
+            datatype = "TEXT"
+        elif (datatype.lower() == "bytes"):
+            datatype = "BLOB"
+        else:
+            datatype = "NULL"
 
         query = str("ALTER TABLE {0} ADD {1} {2}").format(self.db_table, column, datatype)
         db.execute(self, query)

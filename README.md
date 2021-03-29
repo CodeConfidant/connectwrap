@@ -220,10 +220,10 @@
 	</tr>
     <tr>
 		<td>
-            <code>rename_table(old_table_name, new_table_name)</code>
+            <code>rename_table(tablename)</code>
         </td>
 		<td>
-            Rename a table.
+            Rename db_table attribute table.
         </td>
 	</tr>
     <tr>

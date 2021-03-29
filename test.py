@@ -46,8 +46,6 @@ demo_database.select_column("first_name")
 # Select a specific row with the key/value args and output to terminal. 
 demo_database.select_row("position", "Captain")
 
-input("Press enter to continue:")
-
 # Delete the Crew table. 
 demo_database.drop_table("Crew")
 
