@@ -220,6 +220,14 @@
 	</tr>
     <tr>
 		<td>
+            <code>get_top(total)</code>
+        </td>
+		<td>
+           Select and return a list of dictionaries representing rows in the db_table attribute table limited to the number designated in the 'total' argument.
+        </td>
+	</tr>
+    <tr>
+		<td>
             <code>rename_table(tablename)</code>
         </td>
 		<td>
@@ -278,6 +286,14 @@
         </td>
 		<td>
             Select and output to terminal the rows from the db_table attribute table.
+        </td>
+	</tr>
+    <tr>
+		<td>
+            <code>select_top(total)</code>
+        </td>
+		<td>
+            Select and output to terminal the rows from the db_table attribute table limited to the number designated in the 'total' argument.
         </td>
 	</tr>
     <tr>

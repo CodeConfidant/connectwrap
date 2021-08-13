@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-# Setup python package - python setup.py sdist
+
+# Tar Wrap the Package: python setup.py sdist
+# Upload to PYPI: twine upload dist/*
 
 from setuptools import setup, find_packages
 
 setup(
     name='connectwrap',
-    version='1.1.4',
+    version='1.1.5',
     packages=find_packages(),
     license='MIT',
     description='A Python package for SQLite database management & object relational mapping.',

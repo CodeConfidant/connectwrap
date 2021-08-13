@@ -73,6 +73,8 @@ get_row(key, value): 	                Select and return a dictionary representin
 
 get_table(): 	                        Select and return a list of dictionaries with each dictionary representing a row in the db_table attribute table.
 
+get_top(total):                         Select and return a list of dictionaries representing rows in the db_table attribute table limited to the number designated in the 'total' argument.
+
 rename_table(tablename): 	            Rename db_table attribute table.
 
 drop_table(table): 	                    Drop/delete table in the file database.
@@ -91,7 +93,9 @@ create_column(column, datatype): 	    Create a new column within the db_table at
 
 select_tablenames(): 	                Select and output to terminal the table names within a database.
 
-select_table(): 	                    Select and output to terminal the rows from the db_table attribute table. 
+select_table(): 	                    Select and output to terminal the rows from the db_table attribute table.
+
+select_top(total):                      Select and output to terminal the rows from the db_table attribute table limited to the number designated in the 'total' argument.
 
 select_column(*args): 	                Select and output to terminal the values from keys within the db_table attribute table. 
                                             Each arg in *args arguments must be strings containing key names within the table.

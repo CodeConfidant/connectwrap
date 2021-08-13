@@ -40,6 +40,9 @@ demo_database.drop_row("first_name", "Wesley")
 # Select row values in Crew table and output them to terminal. 
 demo_database.select_table()
 
+# Select top 3 row values in Crew table and output them to terminal.
+demo_database.select_top(3)
+
 # Select column values by key first_name and output them to terminal. 
 demo_database.select_column("first_name")
 

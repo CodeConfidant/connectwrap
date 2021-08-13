@@ -262,6 +262,50 @@ class db:
 
         return table 
 
+    # Select and return a list of dictionaries representing rows in the db_table attribute table limited to the number designated in the 'total' argument.
+    def get_top(self, total):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
+        if (db.table_exists(self, self.db_table) == False):
+            raise db.TableNotFoundError("The db_table attribute table doesn't exist within the database!")
+
+        if (type(total) is not int):
+            raise TypeError("The total argument isn't an int!")
+
+        table = list([])
+        keys = list(db.get_keys(self))
+        query = str("SELECT * FROM {0} LIMIT {1}").format(self.db_table, total)
+
+        for row in db.execute(self, query):
+            row_dict = dict.fromkeys(keys)
+            row_factor = list([])
+            i = int(0)
+
+            for column in row:
+                column = str(column).strip("(,')") 
+                            
+                if (column.isdigit() == True):
+                    column = int(column)
+                elif (utils.isfloat(column) == True):
+                    column = float(column)   
+                elif (utils.ishex(column) == True):
+                    column = bytes.fromhex(column)    
+                elif (column == "None"):
+                    column = None
+                else:
+                    column = str(column)
+                
+                row_factor.append(column)
+
+            for key in row_dict:
+                row_dict[key] = row_factor[i]
+                i += 1
+                
+            table.append(row_dict)
+
+        return table
+
     # Rename db_table attribute table. 
     def rename_table(self, table):
         if (self.connection_status != True):
@@ -427,6 +471,20 @@ class db:
             raise db.TableNotFoundError("The db_table attribute table doesn't exist within the database!")
 
         for row in db.get_table(self):
+            print(self.db_table, "Row:", row)
+
+    # Select and output to terminal the rows from the db_table attribute table limited to the number designated in the 'total' argument.
+    def select_top(self, total):
+        if (self.connection_status != True):
+            raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
+
+        if (db.table_exists(self, self.db_table) == False):
+            raise db.TableNotFoundError("The db_table attribute table doesn't exist within the database!")
+
+        if (type(total) is not int):
+            raise TypeError("The total argument isn't an int!")
+
+        for row in db.get_top(self, total):
             print(self.db_table, "Row:", row)
        
     # Select and output to terminal the values from keys within the db_table attribute table. 
