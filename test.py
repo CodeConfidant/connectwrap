@@ -9,11 +9,14 @@ from connectwrap import db; import utils
 # Create demo.db database file.
 utils.create_database("demo.db")
 
-# Create object representing the demo.db file database and Crew table.
-demo_database = db("demo.db", "Crew") 
+# Create object representing the demo.db file database.
+demo_database = db("demo.db")
 
 # Create table Crew in the demo.db database file with the desired keys and types as kwargs. 
 demo_database.create_table("Crew", crew_id = "int", first_name = "str", last_name = "str", age = "int", position = "str")
+
+# Set the db_table attribute to point to the Crew table.
+demo_database.set_db_table("Crew")
  
 # Insert rows/tuples of records in the Crew table. 
 demo_database.insert_row(0, "Jean-Luc", "Picard", 59, "Captain")

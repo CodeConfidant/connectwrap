@@ -1,8 +1,8 @@
 # ***connectwrap***
 
-    A Python package built on top of the sqlite3 module made specifically for SQLite database management & object relational mapping.
+    Python package made to manage, display & parse data from SQLite file databases. 
 
-    Make sure to have the latest version of Python 3 installed although this should work with previous versions.   
+    Python version 3.6 is required at a minimum.   
 
     To install the package with pip enter command in terminal:
         pip install connectwrap
@@ -36,6 +36,7 @@
         </td>
 		<td>
             Attribute of the string type representing a table within the database.
+            Optional, set to None by default without constructor.
         </td>
 	</tr>
     <tr>
