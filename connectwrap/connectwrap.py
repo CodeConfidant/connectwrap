@@ -6,12 +6,9 @@ from connectwrap import utils
 class db:
 
     # Constructor
-    def __init__(self, db_filepath, db_table):
+    def __init__(self, db_filepath, db_table = None):
         if (type(db_filepath) is not str):
             raise TypeError("The path to the db_filepath isn't a string!")
-
-        if (type(db_table) is not str):
-            raise TypeError("The db_table attribute isn't a string!")
 
         if (os.path.exists(db_filepath) == False):
             raise FileNotFoundError("The file that the db_filepath argument represents doesn't exist!")
@@ -22,8 +19,12 @@ class db:
         if (utils.isdb(db_filepath) == False):
             raise ValueError("The db_filepath argument doesn't have the correct extension! Use .db, .sqlite, or .sqlite3!")
 
+        if (db_table is not None):
+            if (type(db_table) is not str):
+                raise TypeError("The db_table attribute isn't a string!")
+            
         self.db_filepath = str(db_filepath)
-        self.db_table = str(db_table)
+        self.db_table = db_table
         self.connection = sqlite3.connect(self.db_filepath)
         self.connection_cursor = self.connection.cursor()
         self.connection_status = bool(True)
@@ -104,6 +105,9 @@ class db:
     def set_db_table(self, db_table):
         if (type(db_table) is not str):
             raise TypeError("The db_table argument isn't a string!")
+
+        if (db.table_exists(self, db_table) == False):
+            raise db.TableNotFoundError("The db_table attribute table doesn't exist within the database!")
 
         self.db_table = db_table
 
@@ -653,7 +657,7 @@ class db:
         if (self.connection_status != True):
             raise db.DatabaseNotOpenError("Database is not open! The connection status attribute is not set to True!")
         
-        if (type(table) is not str):
+        if (type(table) is not str and table is not None):
             raise TypeError("The table argument isn't a string!")
 
         for name in db.get_tablenames(self):
