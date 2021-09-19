@@ -149,7 +149,7 @@ class db:
         connection = sqlite3.connect(self.db_filepath)
         connection.row_factory = sqlite3.Row
         connection_cursor = connection.cursor()
-        query = str("SELECT * FROM {0}").format(self.db_table)
+        query = str(f"SELECT * FROM {self.db_table}")
         connection_cursor.execute(query)
         row = connection_cursor.fetchone()
         connection.close()
@@ -170,7 +170,7 @@ class db:
             raise KeyError("The key argument doesn't exist within the db_table attribute table!")
 
         column_values = list([])
-        query = str("SELECT {0} FROM {1}").format(key, self.db_table)
+        query = str(f"SELECT {key} FROM {self.db_table}")
 
         for column in db.execute(self, query):
             column = str(column).strip("(,')")
@@ -235,7 +235,7 @@ class db:
 
         table = list([])
         keys = list(db.get_keys(self))
-        query = str("SELECT * FROM {0}").format(self.db_table)
+        query = str(f"SELECT * FROM {self.db_table}")
 
         for row in db.execute(self, query):
             row_dict = dict.fromkeys(keys)
@@ -279,7 +279,7 @@ class db:
 
         table = list([])
         keys = list(db.get_keys(self))
-        query = str("SELECT * FROM {0} LIMIT {1}").format(self.db_table, total)
+        query = str(f"SELECT * FROM {self.db_table} LIMIT {total}")
 
         for row in db.execute(self, query):
             row_dict = dict.fromkeys(keys)
@@ -321,7 +321,7 @@ class db:
         if (db.table_exists(self, table) == True):
             raise db.TableExistsError("The tablename argument table already exists within the database!")
 
-        query = str("ALTER TABLE {0} RENAME TO {1}").format(self.db_table, table)
+        query = str(f"ALTER TABLE {self.db_table} RENAME TO {table}")
         db.execute(self, query)
         db.commit(self)
         self.db_table = table
@@ -337,7 +337,7 @@ class db:
         if (db.table_exists(self, table) == False):
             raise db.TableNotFoundError("The table doesn't exist within the database!")
         
-        query = str("DROP TABLE {0}").format(table)
+        query = str(f"DROP TABLE {table}")
         db.execute(self, query)
         db.commit(self)
 
@@ -360,8 +360,6 @@ class db:
         if (db.key_exists(self, key) == False):
             raise KeyError("The key argument doesn't exist within the db_table attribute table!")
 
-        query = str("DELETE FROM {0} WHERE {1}={2}")
-
         if (value == None):
             value = str("'None'")
             
@@ -371,7 +369,7 @@ class db:
         if (type(value) is str):
             value = str("'" + value + "'")
 
-        query = query.format(self.db_table, key, value)
+        query = str(f"DELETE FROM {self.db_table} WHERE {key}={value}")
         db.execute(self, query)
         db.commit(self)
 
@@ -389,7 +387,6 @@ class db:
         if (db.table_exists(self, table) == True):
             raise db.TableExistsError("The table already exists within the database!")
 
-        query = str("CREATE TABLE {0} ({1})")
         record = str("")
         count = int(0)
     
@@ -418,7 +415,7 @@ class db:
 
             count += 1
         
-        query = query.format(table, record)  
+        query = str(f"CREATE TABLE {table} ({record})") 
         db.execute(self, query)
         db.commit(self)
 
@@ -454,7 +451,7 @@ class db:
         else:
             datatype = "NULL"
 
-        query = str("ALTER TABLE {0} ADD {1} {2}").format(self.db_table, column, datatype)
+        query = str(f"ALTER TABLE {self.db_table} ADD {column} {datatype}")
         db.execute(self, query)
         db.commit(self)
 
@@ -548,7 +545,6 @@ class db:
         if (db.table_exists(self, self.db_table) == False):
             raise db.TableNotFoundError("The db_table attribute table doesn't exist within the database!")
 
-        query = str("INSERT INTO {0} VALUES ({1})")
         record = str("")
         count = int(0)
 
@@ -579,7 +575,7 @@ class db:
 
             count += 1
 
-        query = query.format(self.db_table, record)
+        query = str(f"INSERT INTO {self.db_table} VALUES ({record})")
         db.execute(self, query)
         db.commit(self)
 
@@ -611,8 +607,6 @@ class db:
         if (db.key_exists(self, check_key) == False):
             raise KeyError("The check_key argument doesn't exist within the db_table attribute table!")
 
-        query = str("UPDATE {0} SET {1}={2} WHERE {3}={4}")
-
         if (change_value == None):
             change_value = str("'None'")
             
@@ -631,7 +625,7 @@ class db:
         if (type(check_value) is str):
             check_value = str("'" + check_value + "'")
 
-        query = query.format(self.db_table, change_key, change_value, check_key, check_value)
+        query = str(f"UPDATE {self.db_table} SET {change_key}={change_value} WHERE {check_key}={check_value}")
         db.execute(self, query)
         db.commit(self)
 
